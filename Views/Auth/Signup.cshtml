@@ -1,0 +1,31 @@
+﻿@model EventRegistrationSystem.Models.User
+@{
+    ViewData["Title"] = "Signup";
+}
+
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <form asp-action="Signup" asp-controller="Auth" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label"></label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-dark w-100 my-2" />
+            </div>
+        </form>
+    <a asp-action="Login" class="my-2" asp-controller="Auth">Already have an account? login</a>
+    </div>
+</div>

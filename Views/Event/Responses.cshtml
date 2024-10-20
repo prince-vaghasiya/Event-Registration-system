@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewData["Title"] = "Submissions";
+}
+
+
+<div class="container px-3 my-4">
+    <h1>Submissions</h1>
+    @{
+        List<User> users = ViewData["users"] as List<User>;
+    }
+    @if (users.Count >0)
+    {
+        
+    @foreach (var item in users)
+    {
+        <div class="card p-0 my-2">
+            <h5 class="card-header bg-dark text-light">User : @item.UserName</h5>
+            <div class="card-body">
+                <p class="card-text">@item.UserName submitted the form</p>
+                <a asp-action="ResponseDetails" asp-route-userId="@item.Id" asp-route-id="@ViewData["eventId"]" class="btn btn-dark">Details</a>
+            </div>
+        </div>
+    }
+    }else{
+        <h2 class="text-center">No subbmission yet </h2>
+    }
+</div>
+

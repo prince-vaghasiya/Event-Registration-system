@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="w-75 mx-auto my-5">
+
+    <h1>Login</h1>
+    <form asp-action="Login" asp-controller="Auth" method="post">
+        <div class="form-group my-2">
+            <label for="email">Email address</label>
+            <input required type="email" name="email" class="form-control my-1" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+        </div>
+        <div class="form-group my-2">
+            <label for="password">Password</label>
+            <input required type="password" name="password" class="form-control my-1" id="password" placeholder="Password">
+        </div>
+        
+        <button type="submit" class="btn btn-dark w-100">Login</button>
+    </form>
+    <a asp-action="Signup" asp-controller="Auth">Don't have an account? signup</a>
+</div>

@@ -1,0 +1,17 @@
+﻿
+
+@{
+    IEnumerable<Response> responses = ViewData["responses"] as IEnumerable<Response>;
+}
+
+<h1>Response Details</h1>
+
+@foreach(var item in responses)
+{
+    <div class="card p-0 my-2">
+        
+        <div class="card-body">
+            <p class="card-text">@item.Field.FieldLabel : @item.ResponseValue</p>
+        </div>
+    </div>
+}

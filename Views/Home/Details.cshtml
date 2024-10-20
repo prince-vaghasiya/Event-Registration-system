@@ -1,0 +1,138 @@
+﻿@model Event
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="rounded-2 bg-light p-4">
+    <h1>@Model.EventName Orgnized By @Model.Organizer.UserName</h1>
+    <hr />
+    @{
+        if(Model.EventBannerURL != null)
+        {
+            <img src="@Model.EventBannerURL" height="380px" class="p-0 container my-5 rounded-2"/>
+        }
+    }
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DeadLine)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DeadLine)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.MaxParticipants)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MaxParticipants)
+        </dd>
+    </dl>
+    <p class="my-3">
+        @Html.DisplayFor(model => model.EventDescription)
+    </p>
+    
+    @{
+        if(Model.Organizer.UserName == User.Identity.Name)
+        { 
+            <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Add Field to Form
+            </button>
+            <a asp-action="Responses" asp-controller="Event" asp-route-id="@Model.Id" class="btn btn-dark" >
+                See All Responses
+            </a> 
+            <a asp-action="Edit" asp-controller="Home" asp-route-id="@Model.Id" class="btn btn-dark" >
+                Edit
+            </a>
+            <a onclick="return confirm('are you sure to delete this event?')" asp-action="Delete" asp-controller="Event" asp-route-id="@Model.Id" class="btn btn-danger">
+                Delete
+            </a>
+        }
+    }
+
+    
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Add Field to Event Form</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                    <form asp-action="AddFormField" asp-controller="Home" method="post">
+                <div class="modal-body">
+                        <div class="form-group my-2">
+                            <label for="label">label</label>
+                            <input required type="text" name="label" class="form-control my-1" id="label" placeholder="Enter Label">
+                        </div>
+                        <input required type="number" name="eventId" value="@Model.Id" hidden>
+                        <div class="form-group my-2">
+                            <label for="type">Type</label>
+                            <select class="form-control" id="type" name="fieldType">
+                                <option selected value="text">text</option>
+                                <option value="email">email</option>
+                                <option value="url">url</option>
+                                <option value="date">date</option>
+                                <option value="number">number</option>
+                            </select>
+                        </div>
+                        <div class="form-group my-2">
+                            <label for="require">Is Required?</label>
+                            <select class="form-control" id="require" name="isRequired">
+                                <option value="required">required</option>
+                                <option value="notrequired">not required</option>
+                            </select>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+                    </form>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<div class="rounded-2 bg-light p-4 my-4">
+    @if (Convert.ToBoolean(ViewData["responses"]))
+    {
+        @if (Convert.ToBoolean(ViewData["submit"]))
+    {
+            @if (Convert.ToDecimal(ViewData["participants"]) < Model.MaxParticipants)
+        {
+            
+                <form asp-action="RegisterEvent" asp-controller="Home" method="post">
+                    <input name="eventId" type="number" value="@Model.Id" hidden/>
+                    @foreach (var item in Model.FormFields)
+                    {
+                        <div class="form-group my-2">
+                            <label for="@item.Id">@item.FieldLabel</label>
+                            <input required="@item.IsRequired" type="@item.FieldType" name="@item.Id" class="form-control my-1" id="@item.Id" placeholder="Enter @item.FieldLabel">
+                        </div>
+                    }
+                    <button type="submit" class="btn btn-dark w-100">
+                        Submit
+                    </button>
+                </form>
+           
+        }
+        else
+        {
+            <h1>Maximum participants reached!! please contact admin to increase maximum participants </h1>
+        }
+
+
+    }
+    else
+    {
+        <p>This form is not taking response now!!</p>
+
+    }
+    }
+    else
+    {
+        <p>You already submitted the form</p>
+        <a asp-action="ResponseDetails" asp-controller="Event" asp-route-id="@Model.Id" asp-route-userId="@Convert.ToDecimal(ViewData["user"])" class="btn btn-dark"> See your responses</a>
+    }
+</div>
+
